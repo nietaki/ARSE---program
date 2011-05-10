@@ -3,7 +3,6 @@ package session;
 import org.eclipse.swt.events.*;
 import org.eclipse.swt.widgets.*;
 
-
 import arseGUI.*;
 
 public class Session {
