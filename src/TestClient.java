@@ -12,9 +12,10 @@ public class TestClient {
 			String classnameHash = StaticHelper.getClassnameHash(Boolean.class);
 			int len = 3;
 			String msg = "lol";
-			disout.writeBytes(appId);
+			
+			disout.write(appId.getBytes());
 			System.out.println(appId);
-			disout.writeBytes(classnameHash);
+			disout.write(classnameHash.getBytes());
 			System.out.println(classnameHash);
 			disout.writeInt(len);
 			//TODO fix if we're sending some kind of multibyte bullshit

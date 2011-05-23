@@ -43,7 +43,7 @@ public class TestServer implements Runnable {
 			in.read(appIdBytes, 0, 26);
 			in.read(classNameHashBytes, 0, 32);
 			dataLength = in.readInt();
-			System.out.println(appIdBytes);
+			System.out.println(new String(appIdBytes));
 			System.out.println(classNameHashBytes);
 
 			System.out.println(dataLength);
@@ -70,8 +70,7 @@ public class TestServer implements Runnable {
 
 	}
 	public static void main(String args[]) {
-		String data = "Toobie ornaught toobie";
-		System.out.println(data);
+		System.out.println("Starting the server");
 		TestServer ts = new TestServer(new UniversalDeserializer());
 		Thread t=new Thread(ts);
 		t.run();
