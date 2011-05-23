@@ -65,7 +65,7 @@ public class TCPClient {
 	public static void main(String args[]) {
 		TCPClient tc = new TCPClient("localhost", 1234);
 		//tc.sendObject(new Boolean(true));
-		tc.sendObject(new Courier());
+		tc.sendObject(new Boolean(false));
 
 	}
 }

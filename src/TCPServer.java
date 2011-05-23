@@ -5,13 +5,13 @@ import java.io.*;
 import java.net.*;
 
 public class TCPServer implements Runnable {
-	Courier ud;
+	Courier courier;
 	int port = 1234;
 	ServerSocket srvr;
 	static String ok = "OK";
 	static String err = "ER";
-	public TCPServer(Courier ud){
-		this.ud = ud;
+	public TCPServer(Courier courier){
+		this.courier = courier;
 		try{
 			this.srvr = new ServerSocket(this.port);
 		}catch(IOException e){
@@ -56,6 +56,7 @@ public class TCPServer implements Runnable {
 				System.out.println("received msg:");
 				System.out.println(new String(dataBytes));
 				
+				courier.processMessage(new String(appIdBytes),new String(classNameHashBytes), dataBytes);
 				
 				//sending response:
 				PrintWriter out = new PrintWriter(skt.getOutputStream(), true);
