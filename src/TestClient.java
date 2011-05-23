@@ -13,7 +13,9 @@ public class TestClient {
 			int len = 3;
 			String msg = "lol";
 			disout.writeBytes(appId);
+			System.out.println(appId);
 			disout.writeBytes(classnameHash);
+			System.out.println(classnameHash);
 			disout.writeInt(len);
 			//TODO fix if we're sending some kind of multibyte bullshit
 			disout.writeChars(msg);

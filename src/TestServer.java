@@ -34,7 +34,7 @@ public class TestServer implements Runnable {
 			System.out.print("Sth has connected to the server!\n");
 
 			//receiving request:
-			DataInputStream in = new DataInputStream(skt.getInputStream());
+			DataInputStream in = new DataInputStream(new BufferedInputStream(skt.getInputStream()));
 			
 			byte[] appIdBytes = new byte[26];
 			byte[] classNameHashBytes = new byte[32];
@@ -43,11 +43,16 @@ public class TestServer implements Runnable {
 			in.read(appIdBytes, 0, 26);
 			in.read(classNameHashBytes, 0, 32);
 			dataLength = in.readInt();
-			
+			System.out.println(appIdBytes);
+			System.out.println(classNameHashBytes);
+
+			System.out.println(dataLength);
 			//object representation length has the hard max value at int.MAX_VALUE = 2^31 - 1
 			byte[] dataBytes = new byte[dataLength];
 			in.read(dataBytes, 0, dataLength);
 			
+			System.out.println("received msg:");
+			System.out.println(dataBytes);
 			
 			
 			//sending response:
