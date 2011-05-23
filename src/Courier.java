@@ -24,7 +24,7 @@ public class Courier {
 		//BOOLEAN
 		if (classHashname.equals(StaticHelper.getClassnameHash(Boolean.class))){
 			IncommingMessageContainer<Boolean> in  = this.unpack(Boolean.class, senderId, incomingObjectBytes);
-			//TODO push it to the handler
+			//TODO forward it to the handler
 			System.out.println("bool received!");
 			System.out.println(in.getIncomingObject());
 		}else if(classHashname.equals(StaticHelper.getClassnameHash(Courier.class))){
