@@ -41,6 +41,7 @@ public class StaticHelper {
 		return hashtext;
 	}
 	
+	
 	public static void main(String[] args){
 		System.out.println(StaticHelper.getAppId());
 		System.out.println(StaticHelper.getAppId());
