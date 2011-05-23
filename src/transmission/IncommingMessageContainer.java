@@ -1,3 +1,4 @@
+package transmission;
 import java.util.Date;
 public class IncommingMessageContainer<T> {
 	private String senderId;
