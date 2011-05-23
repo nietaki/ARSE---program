@@ -46,6 +46,7 @@ public class StaticHelper {
 		System.out.println(StaticHelper.getAppId());
 	
 		System.out.println(StaticHelper.getClassnameHash(String.class));
+		Class<?> test = String.class;
 	}
 	
 }
