@@ -61,10 +61,5 @@ public class TCPClient {
 		SenderRunnable<T> sr = new SenderRunnable<T>(object);
 		new Thread(sr).run();
 	}
-	public static void main(String args[]) {
-		TCPClient tc = new TCPClient("localhost", 1234);
-		//tc.sendObject(new Boolean(true));
-		tc.sendObject(new Boolean(false));
 
-	}
 }
