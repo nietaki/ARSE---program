@@ -14,14 +14,12 @@ public class Session {
 	private GameMasterSession gameMasterSession;
 	private boolean gameMasterMode;
 	private boolean playerMode;
-	private boolean loggedIn;
 	
 	protected Session(Display display) {
 		this.display = display;
 		arseGUI = new ARSEGUI();
 		gameMasterMode = false;
 		playerMode = false;
-		loggedIn = false;
 	}
 
 	public static void main(String[] args) {
@@ -55,9 +53,8 @@ public class Session {
 						display.sleep();
 				}
 				
-				if(loggedIn){
+				if(playerSession.loggedIn()){
 					playerSession.open();
-					loggedIn = false;
 				}
 				playerMode = false;
 			}
@@ -72,7 +69,6 @@ public class Session {
 				playerSession = new PlayerSession(display);
 				try{
 					playerSession.login(playerLoginGUI.getName(), playerLoginGUI.getAddress(), playerLoginGUI.getPort());
-					loggedIn = true;
 					shell.dispose();
 				} catch(LoginErrorException e){
 					playerLoginGUI.alert(e.getMessage(), shell);

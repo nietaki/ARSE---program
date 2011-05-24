@@ -71,8 +71,14 @@ public class PlayerLoginGUI extends GUI{
 		return addressText.getText();
 	}
 	
-	public String getPort(){
-		return portText.getText();
+	public Integer getPort(){
+		Integer res;
+		try {
+			res = new Integer(portText.getText());
+        } catch (Exception e) {
+        	res = null;
+        }
+		return res;
 	}
 
 	public void addLoginListener(SelectionListener selectionListener) {
