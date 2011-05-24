@@ -1,12 +1,17 @@
 package transmission;
 import java.util.Date;
-public class IncommingMessageContainer<T> {
+public class IncommingMessageContainer {
 	private String senderId;
+	private String classHashname;
 	private Date dateReceived;
-	private T incomingObject;
-	public IncommingMessageContainer(String senderId, T incomingObject){
+	byte[] incomingObjectBytes;
+	private Object incomingObject;
+	public IncommingMessageContainer(String senderId, String classHashname, byte[] incomingObjectBytes){
 		this.senderId = senderId;
-		this.incomingObject = incomingObject;
+		this.classHashname = classHashname;
+		
+		//TODO - instantate with the first object request
+		//this.incomingObject = incomingObject;
 		this.dateReceived = new Date();
 	}
 	
@@ -22,10 +27,10 @@ public class IncommingMessageContainer<T> {
 	public Date getDateReceived() {
 		return dateReceived;
 	}
-	public void setIncomingObject(T incomingObject) {
+	public void setIncomingObject(Object incomingObject) {
 		this.incomingObject = incomingObject;
 	}
-	public T getIncomingObject() {
+	public Object getIncomingObject() {
 		return incomingObject;
 	}
 }
