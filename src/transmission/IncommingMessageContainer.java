@@ -1,6 +1,14 @@
 package transmission;
+import java.io.IOException;
 import java.util.Date;
+
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.*;
+
 public class IncommingMessageContainer {
+	
+	private static ObjectMapper objectMapper = new ObjectMapper();
+	
 	private String senderId;
 	private String classHashname;
 	private Date dateReceived;
@@ -8,29 +16,43 @@ public class IncommingMessageContainer {
 	private Object incomingObject;
 	public IncommingMessageContainer(String senderId, String classHashname, byte[] incomingObjectBytes){
 		this.senderId = senderId;
-		this.classHashname = classHashname;
+		this.classHashname = classHashname ;
+		this.incomingObjectBytes = incomingObjectBytes;
 		
-		//TODO - instantate with the first object request
-		//this.incomingObject = incomingObject;
 		this.dateReceived = new Date();
 	}
 	
-	private void setSenderId(String senderId) {
-		this.senderId = senderId;
-	}
+
 	public String getSenderId() {
 		return senderId;
 	}
-	public void setDateReceived(Date dateReceived) {
-		this.dateReceived = dateReceived;
-	}
+
 	public Date getDateReceived() {
 		return dateReceived;
 	}
-	public void setIncomingObject(Object incomingObject) {
-		this.incomingObject = incomingObject;
+
+	public String getClassHashname() {
+		return classHashname;
 	}
-	public Object getIncomingObject() {
-		return incomingObject;
+	
+	public <T extends Object /* duh */> T getIncomingObject(Class<T> desiredClass) {
+		try{
+			if (this.incomingObject == null){
+				this.incomingObject = IncommingMessageContainer.objectMapper.readValue(this.incomingObjectBytes, desiredClass);
+			}
+			return (T) incomingObject;
+			
+		}catch(IOException e){
+			System.err.println("IOException in IncommingMessageContainer.getIncomingObject. This shouldn't happen");
+			System.exit(2);
+		}
+		catch(ClassCastException e){
+			throw e;
+		
+		}
+		return null;
 	}
+
+
+
 }
