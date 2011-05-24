@@ -77,7 +77,10 @@ public class TCPServer implements Runnable {
 	}
 	public static void main(String args[]) {
 		System.out.println("Starting the server");
-		TCPServer ts = new TCPServer(new Courier());
+		Courier c = new Courier();
+		ExampleBeanHandler selectiveHandler = new ExampleBeanHandler();
+		c.addHandler(selectiveHandler);
+		TCPServer ts = new TCPServer(c);
 		Thread t=new Thread(ts);
 		t.run();
 

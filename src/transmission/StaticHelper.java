@@ -5,12 +5,12 @@ import java.math.BigInteger;
 
 
 public class StaticHelper {
-	static String appId = "";
+	static String appId = null;
 	static SecureRandom secureRandom = new SecureRandom();
 	static MessageDigest md;
 
 	public static String getAppId(){
-		if (StaticHelper.appId == ""){
+		if (StaticHelper.appId == null){
 			StaticHelper.appId = new BigInteger(130, StaticHelper.secureRandom).toString(32);
 			StaticHelper.appId =StaticHelper.padd(StaticHelper.appId, 26);
 		}

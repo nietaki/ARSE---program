@@ -20,6 +20,7 @@ public class Courier {
 		IncommingMessageContainer in  = new IncommingMessageContainer(senderId, classHashname, incomingObjectBytes);
 		//TODO forward it to the handler
 		System.out.println("sth received!");
+		this.notifyHandlers(in);
 		
 		//System.out.println(in.getIncomingObject(Integer.class));
 

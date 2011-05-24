@@ -15,7 +15,12 @@ public class TCPClientFactory {
 	public static void main(String args[]) {
 		TCPClientFactory tcf = new TCPClientFactory("localhost", 1234);
 		TCPClient tc = tcf.tcpClient();
-		//tc.sendObject(new Boolean(true));
+		
+		MyExampleBean myb = new MyExampleBean();
+		myb.setBar("dupa");
+		myb.setBaz(3);
+		
+		tc.sendObject(myb);
 		tc.sendObject(new Boolean(false));
 
 	}
