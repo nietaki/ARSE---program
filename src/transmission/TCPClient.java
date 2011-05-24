@@ -58,9 +58,7 @@ public class TCPClient {
 		}
 	}
 	public <T> void sendObject(T object){
-		JsonFactory f = new JsonFactory();
-		
-		SenderRunnable sr = new SenderRunnable(object);
+		SenderRunnable<T> sr = new SenderRunnable<T>(object);
 		new Thread(sr).run();
 	}
 	public static void main(String args[]) {

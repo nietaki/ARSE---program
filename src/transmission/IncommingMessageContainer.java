@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class IncommingMessageContainer {
 	
@@ -14,6 +15,8 @@ public class IncommingMessageContainer {
 	private Date dateReceived;
 	byte[] incomingObjectBytes;
 	private Object incomingObject;
+	
+	private ReentrantLock lock = new ReentrantLock();
 	public IncommingMessageContainer(String senderId, String classHashname, byte[] incomingObjectBytes){
 		this.senderId = senderId;
 		this.classHashname = classHashname ;
@@ -35,22 +38,26 @@ public class IncommingMessageContainer {
 		return classHashname;
 	}
 	
-	public <T extends Object /* duh */> T getIncomingObject(Class<T> desiredClass) {
+	public <T extends Object /* duh */> T getIncomingObject(Class<T> desiredClass) throws IOException{
+		T ret = null;
 		try{
-			if (this.incomingObject == null){
+			//FIXME
+			this.lock.lock();
+			if ((this.incomingObject == null) || (this.incomingObject.getClass() != desiredClass)){
+				//TODO a fix if someone maps to a wrong class type?
 				this.incomingObject = IncommingMessageContainer.objectMapper.readValue(this.incomingObjectBytes, desiredClass);
+				ret = (T) this.incomingObject;
 			}
-			return (T) incomingObject;
+			
 			
 		}catch(IOException e){
-			System.err.println("IOException in IncommingMessageContainer.getIncomingObject. This shouldn't happen");
-			System.exit(2);
-		}
-		catch(ClassCastException e){
+			System.err.println("IOException in IncommingMessageContainer.getIncomingObject. Perhaps you are trying to get the wrong type of object from the IncommingMessageContainer? ");
+			System.err.println(e.getMessage());
 			throw e;
-		
+		}finally{
+			this.lock.unlock();
 		}
-		return null;
+		return ret;
 	}
 
 
