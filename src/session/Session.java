@@ -53,7 +53,7 @@ public class Session {
 						display.sleep();
 				}
 				
-				if(playerSession.loggedIn()){
+				if(!shell.isDisposed() && playerSession.loggedIn()){
 					playerSession.open();
 				}
 				playerMode = false;

@@ -10,7 +10,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 
-import session.MessengerLogic;
+//import session.MessengerLogic;
 
 public class MessengerComposite {
 
@@ -22,7 +22,7 @@ public class MessengerComposite {
 	private final int WIDTH = 300;
 	GridLayout historyGridLayout;
 
-	MessengerComposite(Shell shell) {
+	public MessengerComposite(Shell shell) {
 		group = new Group(shell, SWT.SHADOW_IN);
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 1;
@@ -58,11 +58,6 @@ public class MessengerComposite {
 		GridData sendGD = new GridData();
 		sendGD.widthHint = WIDTH;
 		send.setLayoutData(sendGD);
-		send.addMouseListener(new MouseAdapter() {
-			public void mouseUp(MouseEvent e) {
-				sendMessage();
-			}
-		});
 	}
 
 	public void newMessage(String message, String who, Date date) {
@@ -83,11 +78,15 @@ public class MessengerComposite {
 		history_c.setSize(history_c.computeSize(WIDTH, SWT.DEFAULT));
 	}
 
-	private void sendMessage() {
-		//TODO
-		//MessengerLogic.send(newMessage.getText(), ... );
+	public String sendMessage() {
+		String res = newMessage.getText();
 		newMessage(newMessage.getText(), "Ja", new Date());
 		newMessage.setText("");
+		return res;
+	}
+
+	public void addNewMessageListener(SelectionListener selectionListener) {
+		send.addSelectionListener(selectionListener);
 	}
 
 }

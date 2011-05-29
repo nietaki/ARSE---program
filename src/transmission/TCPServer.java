@@ -7,12 +7,14 @@ import java.net.*;
 
 public class TCPServer implements Runnable {
 	Courier courier;
-	int port = 1234;
+	int port;
 	ServerSocket srvr;
 	static String ok = "OK";
 	static String err = "ER";
-	public TCPServer(Courier courier){
+	
+	public TCPServer(Courier courier, int port){
 		this.courier = courier;
+		this.port = port;
 		try{
 			this.srvr = new ServerSocket(this.port);
 		}catch(IOException e){
@@ -80,7 +82,7 @@ public class TCPServer implements Runnable {
 		Courier c = new Courier();
 		ExampleBeanHandler selectiveHandler = new ExampleBeanHandler();
 		c.addHandler(selectiveHandler);
-		TCPServer ts = new TCPServer(c);
+		TCPServer ts = new TCPServer(c, 1234);
 		Thread t=new Thread(ts);
 		t.run();
 
