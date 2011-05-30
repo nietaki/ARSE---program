@@ -93,5 +93,8 @@ public class MessengerComposite {
 	public void addNewMessageListener(SelectionListener selectionListener) {
 		send.addSelectionListener(selectionListener);
 	}
-
+	
+	public void newMessageDisable() {
+		send.setEnabled(false);
+	}
 }

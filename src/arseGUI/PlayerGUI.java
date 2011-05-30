@@ -39,4 +39,8 @@ public class PlayerGUI extends GUI{
 	public void newMessage(String author, String message, Date dateRecieved) {
 		messenger.newMessage(message, author, dateRecieved);
 	}
+	
+	public void newMessageDisable() {
+		messenger.newMessageDisable();
+	}
 }

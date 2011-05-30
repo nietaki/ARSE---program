@@ -76,6 +76,14 @@ public class PlayerSession {
 		shell = playerGUI.open(display);
 		initializePlayerGUI();
 		while(!shell.isDisposed()){
+			if(!loggedIn){
+				server.finalize();
+				try {
+					serverThread.join();
+				} catch (InterruptedException e) {
+		
+				}
+			}
 			if(!display.readAndDispatch())
 				display.sleep();
 		}
@@ -90,13 +98,14 @@ public class PlayerSession {
 			client.sendObject(logout);	
 		}
 		
-		loggedIn = false;
-		
-		server.finalize();
-		try {
-			serverThread.join();
-		} catch (InterruptedException e) {
-
+		if(loggedIn){
+			loggedIn = false;
+			server.finalize();
+			try {
+				serverThread.join();
+			} catch (InterruptedException e) {
+	
+			}
 		}
 	}
 
@@ -137,16 +146,11 @@ public class PlayerSession {
 				display.asyncExec(new Runnable() {
 			        public void run(){
 			        	playerGUI.newMessage("MG", "Koniec sesji", dateRecieved);
+			        	playerGUI.newMessageDisable();
 			        }
 			    });
-				
+				loggedIn = false;
 				factory = null;
-				courier.removeHandler(messageHandler);
-				courier.removeHandler(logoutHandler);
-				playerGUI.addNewMessageListener(new SelectionListener(){
-					public void widgetSelected(SelectionEvent e) {}
-					public void widgetDefaultSelected(SelectionEvent e) {}
-				});
 			}
 		});
 		
@@ -159,4 +163,3 @@ public class PlayerSession {
 	}
 
 }
-//192.168.0.14
