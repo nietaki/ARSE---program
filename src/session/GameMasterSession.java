@@ -74,19 +74,20 @@ public class GameMasterSession {
 		logoutHandler = new LogoutHandler(new Listener(){
 			@Override
 			public void handle(Object o, String senderId, final Date dateRecieved, String address){
+				final Logout logout = (Logout) o;
 				final int index = playerIds.lastIndexOf(senderId);
 				playerIds.remove(index);
 				factories.remove(index);
 
 				display.asyncExec(new Runnable() {
 			        public void run(){
-			        	gameMasterGUI.newMessage("ARSE", "Użytkownik "+players.get(index)+" opuścił grę.", dateRecieved);
+			        	gameMasterGUI.newMessage("ARSE", "Użytkownik "+logout.getName()+" opuścił grę.", dateRecieved);
 			        }
 			    });
 				
 				Message msg = new Message();
 				msg.setAuthor("MG");
-				msg.setMessage("Użytkownik "+players.get(index)+" opuścił grę.");
+				msg.setMessage("Użytkownik "+logout.getName()+" opuścił grę.");
 				
 				players.remove(index);
 				
