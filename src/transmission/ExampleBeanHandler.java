@@ -25,6 +25,9 @@ public class ExampleBeanHandler implements IncommingMessageHandler {
 			System.out.println("and it has properties, too");
 			System.out.println("inObject.bar = " + inObject.getBar());
 			
+			System.out.println("And it comes from = " + msg.getFromAddress());
+			
+			
 			
 		}catch(IOException e){
 			System.err.println("there was a problem with the received object, I can disregard and stop processing or exit the application if it's serious");

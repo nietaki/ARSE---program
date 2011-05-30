@@ -1,6 +1,9 @@
 package transmission;
 import java.security.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.math.BigInteger;
+import java.net.SocketAddress;
 
 
 
@@ -8,6 +11,10 @@ public class StaticHelper {
 	static String appId = null;
 	static SecureRandom secureRandom = new SecureRandom();
 	static MessageDigest md;
+	
+	static Pattern addressPattern = null;
+	
+	
 
 	public static String getAppId(){
 		if (StaticHelper.appId == null){
@@ -49,6 +56,16 @@ public class StaticHelper {
 	
 		System.out.println(StaticHelper.getClassnameHash(String.class));
 		Class<?> test = String.class;
+	}
+	
+	public static String getAddress(SocketAddress s){
+		if(StaticHelper.addressPattern == null){
+			StaticHelper.addressPattern = Pattern.compile("^/?([0-9\\.]*).*");
+		}
+		Matcher matcher = StaticHelper.addressPattern.matcher(s.toString());
+		matcher.matches();
+		return matcher.group(1);
+
 	}
 	
 }

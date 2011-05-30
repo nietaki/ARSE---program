@@ -13,11 +13,11 @@ public class Courier {
 		this.handlers = new LinkedList<IncommingMessageHandler>();
 	}
 	
-	public void processMessage(String senderId, String classHashname, byte[] incomingObjectBytes){
+	public void processMessage(String senderId, String classHashname, byte[] incomingObjectBytes, String fromAddress){
 		
 		
 
-		IncommingMessageContainer in  = new IncommingMessageContainer(senderId, classHashname, incomingObjectBytes);
+		IncommingMessageContainer in  = new IncommingMessageContainer(senderId, classHashname, incomingObjectBytes, fromAddress);
 		//TODO forward it to the handler
 		System.out.println("sth received!");
 		this.notifyHandlers(in);

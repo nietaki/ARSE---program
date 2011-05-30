@@ -15,9 +15,11 @@ public class IncommingMessageContainer {
 	private Date dateReceived;
 	byte[] incomingObjectBytes;
 	private Object incomingObject;
+	private String fromAddress;
 	
 	private ReentrantLock lock = new ReentrantLock();
-	public IncommingMessageContainer(String senderId, String classHashname, byte[] incomingObjectBytes){
+	public IncommingMessageContainer(String senderId, String classHashname, byte[] incomingObjectBytes, String fromAddress){
+		this.setFromAddress(fromAddress);
 		this.senderId = senderId;
 		this.classHashname = classHashname ;
 		this.incomingObjectBytes = incomingObjectBytes;
@@ -58,6 +60,16 @@ public class IncommingMessageContainer {
 			this.lock.unlock();
 		}
 		return ret;
+	}
+
+
+	public void setFromAddress(String fromAddress) {
+		this.fromAddress = fromAddress;
+	}
+
+
+	public String getFromAddress() {
+		return fromAddress;
 	}
 
 

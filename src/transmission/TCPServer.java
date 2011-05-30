@@ -36,8 +36,12 @@ public class TCPServer implements Runnable {
 			try{
 				
 				Socket skt = srvr.accept();
-				System.out.print("Sth has connected to the server!\n");
+				System.out.println("Sth has connected to the server!\n");
+				//System.out.println("remote address: " + skt.getRemoteSocketAddress().toString());
+				String fromAddress = StaticHelper.getAddress(skt.getRemoteSocketAddress());
+				System.out.println("real remote address: " + fromAddress);
 				
+				System.out.println("");
 				//receiving request:
 				DataInputStream in = new DataInputStream(new BufferedInputStream(skt.getInputStream()));
 				
@@ -59,7 +63,7 @@ public class TCPServer implements Runnable {
 				System.out.println("received msg:");
 				System.out.println(new String(dataBytes));
 				
-				courier.processMessage(new String(appIdBytes), new String(classNameHashBytes), dataBytes);
+				courier.processMessage(new String(appIdBytes), new String(classNameHashBytes), dataBytes, fromAddress);
 				
 				//sending response:
 				PrintWriter out = new PrintWriter(skt.getOutputStream(), true);
