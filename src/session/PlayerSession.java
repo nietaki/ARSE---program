@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Shell;
 import arseGUI.PlayerGUI;
 
 import transmission.Courier;
+import transmission.LogoutHandler;
 import transmission.MessageHandler;
 import transmission.TCPClient;
 import transmission.TCPClientFactory;
@@ -30,6 +31,7 @@ public class PlayerSession {
 	private TCPClientFactory factory; 
 	
 	private Player player;
+	private LogoutHandler logoutHandler;
 	
 	protected PlayerSession(Display display) {
 		this.display = display;
@@ -67,9 +69,7 @@ public class PlayerSession {
 		 *  TODO TIMEOUT
 		 *  
 		 */
-		synchronized(loggedIn){
-			loggedIn = true;	
-		}
+		loggedIn = true;	
 	}
 	
 	public void open() {
@@ -79,12 +79,24 @@ public class PlayerSession {
 			if(!display.readAndDispatch())
 				display.sleep();
 		}
-		if(serverThread != null){
-			/*
-			 * 
-			 *  TODO zabijanie watku
-			 *  
-			 */
+		logout();
+	}
+
+	private void logout() {
+		if(factory != null){
+			Logout logout = new Logout();
+			logout.setName(player.getName());
+			TCPClient client = factory.tcpClient();
+			client.sendObject(logout);	
+		}
+		
+		loggedIn = false;
+		
+		server.finalize();
+		try {
+			serverThread.join();
+		} catch (InterruptedException e) {
+
 		}
 	}
 
@@ -109,7 +121,7 @@ public class PlayerSession {
 		
 		messageHandler = new MessageHandler(new Listener(){
 			@Override
-			public void handle(Object o, String senderId, final Date dateRecieved) {
+			public void handle(Object o, String senderId, final Date dateRecieved, String address) {
 				final Message msg = (Message) o;
 				display.asyncExec(new Runnable() {
 			        public void run(){
@@ -119,13 +131,32 @@ public class PlayerSession {
 			}
 		});
 		
+		logoutHandler = new LogoutHandler(new Listener(){
+			@Override
+			public void handle(Object o, String senderId, final Date dateRecieved, String address) {
+				display.asyncExec(new Runnable() {
+			        public void run(){
+			        	playerGUI.newMessage("MG", "Koniec sesji", dateRecieved);
+			        }
+			    });
+				
+				factory = null;
+				courier.removeHandler(messageHandler);
+				courier.removeHandler(logoutHandler);
+				playerGUI.addNewMessageListener(new SelectionListener(){
+					public void widgetSelected(SelectionEvent e) {}
+					public void widgetDefaultSelected(SelectionEvent e) {}
+				});
+			}
+		});
+		
 		courier.addHandler(messageHandler);
+		courier.addHandler(logoutHandler);
 	}
 
 	protected boolean loggedIn() {
-		synchronized(loggedIn){
-			return loggedIn;			
-		}
+		return loggedIn;			
 	}
 
 }
+//192.168.0.14

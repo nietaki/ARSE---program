@@ -23,7 +23,7 @@ public class TCPServer implements Runnable {
 		}
 	}
 	
-	protected void finalize(){
+	public void finalize(){
 		try{
 			this.srvr.close();
 		}catch(IOException e){
@@ -76,7 +76,8 @@ public class TCPServer implements Runnable {
 				
 			}catch(IOException e){
 				//FIXME
-				System.err.println(e.getMessage());
+				//System.err.println(e.getMessage());
+				return;
 			}
 		}
 

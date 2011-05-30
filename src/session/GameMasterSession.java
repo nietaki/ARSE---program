@@ -19,9 +19,12 @@ public class GameMasterSession {
 	private Thread serverThread;
 	private MessageHandler messageHandler;
 	private PlayerHandler playerHandler;
+	private LogoutHandler logoutHandler;
 	
 	private ArrayList<String> playerIds;
+	private ArrayList<String> players;
 	private ArrayList<TCPClientFactory> factories;
+
 		
 	public GameMasterSession(Display display) {
 		this.display = display;
@@ -29,6 +32,7 @@ public class GameMasterSession {
 		this.serverThread = null;
 		this.playerIds = new ArrayList<String>();
 		this.factories = new ArrayList<TCPClientFactory>();
+		this.players = new ArrayList<String>();
 	}
 
 	public void open() {
@@ -39,11 +43,16 @@ public class GameMasterSession {
 				display.sleep();
 		}
 		if(serverThread != null){
-			/*
-			 * 
-			 *  TODO zabijanie watku
-			 *  
-			 */
+			Logout logout = new Logout();
+			logout.setName("MG");
+			sendAll(logout);
+			
+			server.finalize();
+			try {
+				serverThread.join();
+			} catch (InterruptedException e) {
+
+			}
 		}
 	}
 
@@ -62,27 +71,58 @@ public class GameMasterSession {
 	protected void startSession(){
 		courier = new Courier();
 		
+		logoutHandler = new LogoutHandler(new Listener(){
+			@Override
+			public void handle(Object o, String senderId, final Date dateRecieved, String address){
+				final int index = playerIds.lastIndexOf(senderId);
+				playerIds.remove(index);
+				factories.remove(index);
+
+				display.asyncExec(new Runnable() {
+			        public void run(){
+			        	gameMasterGUI.newMessage("ARSE", "Użytkownik "+players.get(index)+" opuścił grę.", dateRecieved);
+			        }
+			    });
+				
+				Message msg = new Message();
+				msg.setAuthor("MG");
+				msg.setMessage("Użytkownik "+players.get(index)+" opuścił grę.");
+				
+				players.remove(index);
+				
+				sendAll(msg);
+			}
+		});
+		
 		playerHandler = new PlayerHandler(new Listener(){
 			@Override
-			public void handle(Object o, String senderId, Date dateRecieved){
+			public void handle(Object o, String senderId, final Date dateRecieved, String address){
+				final Player newPlayer = (Player) o;
 				synchronized(factories){
-					if(!playerIds.contains(senderId)){
-						Player newPlayer = (Player) o;
+					if(!playerIds.contains(senderId)){ // login
+						display.asyncExec(new Runnable() {
+					        public void run(){
+					        	gameMasterGUI.newMessage("ARSE", "Użytkownik "+newPlayer.getName()+" dołączył do gry.", dateRecieved);
+					        }
+					    });
+						
+						Message msg = new Message();
+						msg.setAuthor("MG");
+						msg.setMessage("Użytkownik "+newPlayer.getName()+" dołączył do gry.");
+						
+						sendAll(msg);
+						
+						players.add(newPlayer.getName());
 						playerIds.add(senderId);
-						/*
-						 * 
-						 * TODO SKAD MAM WZIAC port i adres???????????????????
-						 * 
-						 */
-						factories.add(new TCPClientFactory("192.168.0.14", port));
-					}	
+						factories.add(new TCPClientFactory(address, port));
+					}
 				}
 			}
 		});
 		
 		messageHandler = new MessageHandler(new Listener(){
 			@Override
-			public void handle(Object o, String senderId, final Date dateRecieved){
+			public void handle(Object o, String senderId, final Date dateRecieved, String address){
 				synchronized(factories){
 					if(playerIds.contains(senderId)){
 						final Message msg = (Message) o;
@@ -105,12 +145,20 @@ public class GameMasterSession {
 		
 		courier.addHandler(playerHandler);
 		courier.addHandler(messageHandler);
+		courier.addHandler(logoutHandler);
 		
 		server = new TCPServer(courier, port);
 		serverThread = new Thread(server);
 		serverThread.start();
 		
 		addGUIlisteners();		
+	}
+	
+	private void sendAll(Object o){
+		for(int i = 0; i < factories.size(); i++){
+			TCPClient client = factories.get(i).tcpClient();
+			client.sendObject(o);
+		}
 	}
 	
 	private void addGUIlisteners() {

@@ -26,7 +26,7 @@ public class PlayerHandler implements IncommingMessageHandler {
 	public void handleIncommingMessage(IncommingMessageContainer msg) {
 		try {
 			Player player = msg.getIncomingObject(Player.class);
-			listener.handle(player, msg.getSenderId(), msg.getDateReceived());
+			listener.handle(player, msg.getSenderId(), msg.getDateReceived(), msg.getFromAddress());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
