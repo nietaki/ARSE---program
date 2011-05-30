@@ -10,10 +10,15 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 
-//import session.MessengerLogic;
-
 public class MessengerComposite {
 
+	/*
+	 * 
+	 * TODO automatyczne przewijanie okna rozmowy
+	 * 
+	 */
+	
+	
 	private final Group group;
 	private final ScrolledComposite history_sc;
 	private final Composite history_c;
@@ -36,7 +41,7 @@ public class MessengerComposite {
 		history_sc = new ScrolledComposite(group, SWT.V_SCROLL | SWT.BORDER);
 		history_sc.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
 				1, 1));
-
+		
 		history_c = new Composite(history_sc, SWT.NONE);
 		history_sc.setContent(history_c);
 		history_c.setSize(WIDTH, 200);

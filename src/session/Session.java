@@ -46,6 +46,7 @@ public class Session {
 			}
 			else if(playerMode){
 				playerLoginGUI = new PlayerLoginGUI();
+				playerSession = new PlayerSession(display);
 				shell = playerLoginGUI.open(display);
 				initializePlayerLoginGUI();
 				while(!shell.isDisposed()){
@@ -53,7 +54,7 @@ public class Session {
 						display.sleep();
 				}
 				
-				if(!shell.isDisposed() && playerSession.loggedIn()){
+				if(playerSession.loggedIn()){
 					playerSession.open();
 				}
 				playerMode = false;
@@ -66,7 +67,6 @@ public class Session {
 	private void initializePlayerLoginGUI() {
 		playerLoginGUI.addLoginListener(new SelectionListener(){
 			private void login(){
-				playerSession = new PlayerSession(display);
 				try{
 					playerSession.login(playerLoginGUI.getName(), playerLoginGUI.getAddress(), playerLoginGUI.getPort());
 					shell.dispose();

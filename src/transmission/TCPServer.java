@@ -37,7 +37,7 @@ public class TCPServer implements Runnable {
 				
 				Socket skt = srvr.accept();
 				System.out.print("Sth has connected to the server!\n");
-	
+				
 				//receiving request:
 				DataInputStream in = new DataInputStream(new BufferedInputStream(skt.getInputStream()));
 				
@@ -59,11 +59,11 @@ public class TCPServer implements Runnable {
 				System.out.println("received msg:");
 				System.out.println(new String(dataBytes));
 				
-				courier.processMessage(new String(appIdBytes),new String(classNameHashBytes), dataBytes);
+				courier.processMessage(new String(appIdBytes), new String(classNameHashBytes), dataBytes);
 				
 				//sending response:
 				PrintWriter out = new PrintWriter(skt.getOutputStream(), true);
-	
+
 				String data = TCPServer.ok;
 				System.out.print("Sending string: '" + data + "'\n");
 				out.print(data);

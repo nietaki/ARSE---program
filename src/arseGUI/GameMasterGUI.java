@@ -1,5 +1,7 @@
 package arseGUI;
 
+import java.util.Date;
+
 import org.eclipse.swt.*;
 import org.eclipse.swt.events.*;
 import org.eclipse.swt.layout.*;
@@ -166,5 +168,9 @@ public class GameMasterGUI extends GUI {
 
 	public String sendMessage() {
 		return messenger.sendMessage();
+	}
+
+	public void newMessage(String author, String message, Date dateRecieved) {
+		messenger.newMessage(message, author, dateRecieved);
 	}
 }
