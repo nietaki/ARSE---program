@@ -59,7 +59,7 @@ public class TCPClient {
 	}
 	public <T> void sendObject(T object){
 		SenderRunnable<T> sr = new SenderRunnable<T>(object);
-		new Thread(sr).run();
+		new Thread(sr).start();
 	}
 
 }
